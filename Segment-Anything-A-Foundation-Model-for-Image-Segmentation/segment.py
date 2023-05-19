@@ -31,7 +31,7 @@ def show_anns(anns):
         np.dstack((img, m*0.35))
         ax.imshow(np.dstack((img, m*0.35)))
 
-sam = sam_model_registry["vit_h"](checkpoint="sam_vit_h_4b8939.pth")
+sam = sam_model_registry["vit_h"](checkpoint="/home/hao/data/ckpts/sam_vit_h_4b8939.pth")
 sam.cuda()
 mask_generator = SamAutomaticMaskGenerator(sam)
 
@@ -39,9 +39,11 @@ image_path = args.input
 image_name = image_path.split(os.path.sep)[-1]
 image = cv2.imread(image_path)
 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+# image = cv2.resize(image, (0,0),fx=0.25,fy=0.25)
 masks = mask_generator.generate(image)
 plt.figure(figsize=(12, 9))
 plt.imshow(image)
 show_anns(masks)
 plt.axis('off')
 plt.savefig(os.path.join('outputs', image_name), bbox_inches='tight')
+plt.show()
